@@ -2,7 +2,9 @@ package weather.service;
 
 import lombok.NonNull;
 
+import java.util.Optional;
+
 public interface WeatherService {
 
-    WeatherModel.Read create(@NonNull WeatherModel.Create createWeather);
+    Optional<WeatherModel.Read> getByCity(@NonNull String city);
 }

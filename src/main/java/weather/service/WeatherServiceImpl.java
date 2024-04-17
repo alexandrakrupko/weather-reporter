@@ -3,14 +3,17 @@ package weather.service;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 public class WeatherServiceImpl implements WeatherService {
 
     @Override
-    public WeatherModel.Read create(WeatherModel.@NonNull Create createModel) {
+    public Optional<WeatherModel.Read> getByCity(@NonNull String city) {
         WeatherModel.Read readWeather = new WeatherModel.Read();
-        readWeather.setCity(createModel.getCity());
-        readWeather.setLocalDateTime(createModel.getLocalDateTime());
+        readWeather.setCity(city);
+        readWeather.setLocalDateTime(LocalDateTime.now());
 
         TemperatureModel.Read readTemperature = new TemperatureModel.Read();
         readTemperature.setActual(13.2f);
@@ -18,6 +21,6 @@ public class WeatherServiceImpl implements WeatherService {
         readTemperature.setRainfall("Rain");
         readWeather.setReadTemperature(readTemperature);
 
-        return readWeather;
+        return Optional.of(readWeather);
     }
 }
