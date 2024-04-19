@@ -1,10 +1,18 @@
 package weather.mapper;
 
 import lombok.NonNull;
+import org.springframework.stereotype.Component;
 import weather.model.TemperatureDto;
 import weather.response.TemperatureResponse;
 
-public interface TemperatureResponseMapper {
+@Component
+public class TemperatureResponseMapper {
 
-    TemperatureResponse mapTemperatureDtoInTemperatureResponse(@NonNull TemperatureDto temperatureDto);
+    public TemperatureResponse mapTemperatureDtoInTemperatureResponse(@NonNull TemperatureDto temperatureDto) {
+        return TemperatureResponse.builder()
+                .actual(temperatureDto.getActual())
+                .feelsLike(temperatureDto.getFeelsLike())
+                .rainfall(temperatureDto.getRainfall())
+                .build();
+    }
 }

@@ -1,11 +1,11 @@
 package weather.service;
 
 import lombok.NonNull;
-import weather.model.WeatherDto;
+import weather.response.WeatherResponse;
 
 import java.util.Optional;
 
 public interface WeatherService {
 
-    Optional<WeatherDto> getByCity(@NonNull String city);
+    Optional<WeatherResponse> getByCity(@NonNull String city);
 }
