@@ -1,4 +1,4 @@
-package weather.model;
+package weather.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

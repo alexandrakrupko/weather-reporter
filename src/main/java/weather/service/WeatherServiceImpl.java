@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import weather.mapper.WeatherResponseMapper;
-import weather.model.TemperatureDto;
-import weather.model.WeatherDto;
+import weather.dto.TemperatureDto;
+import weather.dto.WeatherDto;
 import weather.response.WeatherResponse;
 
 import java.time.LocalDateTime;
