@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: weather-reporter
+
+integration:
+  openweather:
+    units: metric

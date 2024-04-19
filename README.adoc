@@ -1,0 +1,4 @@
+== Requirements
+
+* Add an environment variable in the format: `integration.openweather.api-key={API key}` +
+You can find API key via https://docs.google.com/document/d/1371z3iIVCh6gboEeo_qPngjA-dmcCDl2tuhp89H_f3M/edit?usp=drive_link[link]

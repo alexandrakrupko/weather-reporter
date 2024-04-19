@@ -1,11 +1,10 @@
 package weather.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class TemperatureDto {
 
     private @NonNull Float actual;
