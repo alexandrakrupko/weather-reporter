@@ -19,6 +19,6 @@ public class WeatherController {
     public ResponseEntity<WeatherResponse> getByCity(@PathVariable String city) {
         return weatherService.getByCity(city)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new WeatherNotFoundException("City not found: '%s'".formatted(city)));
+                .orElseThrow(() -> new WeatherNotFoundException("City not found", city));
     }
 }
