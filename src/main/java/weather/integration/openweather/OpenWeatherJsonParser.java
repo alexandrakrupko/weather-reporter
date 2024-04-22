@@ -1,6 +1,5 @@
 package weather.integration.openweather;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
@@ -8,12 +7,14 @@ import org.springframework.stereotype.Component;
 import weather.dto.TemperatureDto;
 import weather.dto.WeatherDto;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 
 @Component
 class OpenWeatherJsonParser {
 
-    public WeatherDto toWeatherDto(@NonNull String json) throws JsonProcessingException {
+    public WeatherDto toWeatherDto(@NonNull InputStream json) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
 

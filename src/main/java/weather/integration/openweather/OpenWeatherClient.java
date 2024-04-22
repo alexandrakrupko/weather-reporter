@@ -1,15 +1,15 @@
 package weather.integration.openweather;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import weather.dto.WeatherDto;
-import weather.exception.CityNotFoundException;
-import weather.exception.RequestProcessingException;
+import weather.exception.ExternalServiceInvokeException;
+import weather.exception.ExternalServiceException;
+import weather.exception.InvalidApiKeyException;
 import weather.integration.WeatherClient;
 
 import java.util.Optional;
@@ -30,27 +30,28 @@ class OpenWeatherClient implements WeatherClient {
                 "&units=", openWeatherProperties.getUnits()
         );
 
-        ResponseEntity<String> response;
+        Optional<WeatherDto> optionalWeatherDto;
         try {
-            response = RestClient.create()
+            optionalWeatherDto = RestClient.create()
                     .get()
                     .uri(url)
                     .header("Accept", "application/json")
-                    .retrieve()
-                    .toEntity(String.class);
-        } catch (RuntimeException e) {
-            throw new CityNotFoundException(
-                    "Fail to get weather data for city \"%s\"".formatted(city), e);
-        }
+                    .exchange((request, response) -> {
+                        HttpStatusCode statusCode = response.getStatusCode();
+                        if (statusCode.isSameCodeAs(HttpStatusCode.valueOf(404))) {
+                            return Optional.empty();
+                        } else if (statusCode.isSameCodeAs(HttpStatusCode.valueOf(401))) {
+                            throw new InvalidApiKeyException("Invalid API key provided");
+                        } else if (statusCode.is5xxServerError()) {
+                            throw new ExternalServiceException("Fail to get weather data");
+                        } else {
+                            return Optional.of(openWeatherJsonParser.toWeatherDto(response.getBody()));
+                        }
+                    });
 
-        if (!response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200)) || !response.hasBody()) {
-            throw new CityNotFoundException("Fail to get weather data for city \"%s\"".formatted(city));
-        }
-
-        try {
-            return Optional.of(openWeatherJsonParser.toWeatherDto(response.getBody()));
-        } catch (JsonProcessingException e) {
-            throw new RequestProcessingException("Fail to get weather data", e);
+            return optionalWeatherDto;
+        } catch (RestClientResponseException e) {
+            throw new ExternalServiceInvokeException("Fail to get weather data", e);
         }
     }
 }

@@ -3,11 +3,9 @@ package weather.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import weather.dto.WeatherDto;
-import weather.exception.RequestProcessingException;
+import weather.integration.WeatherClient;
 import weather.mapper.WeatherResponseMapper;
 import weather.response.WeatherResponse;
-import weather.integration.WeatherClient;
 
 import java.util.Optional;
 
@@ -20,9 +18,7 @@ class WeatherServiceImpl implements WeatherService {
 
     @Override
     public Optional<WeatherResponse> getByCity(@NonNull String city) {
-        Optional<WeatherDto> optionalWeatherDto = weatherClient.getByCity(city);
-        return Optional.ofNullable(optionalWeatherDto
-                .map(weatherResponseMapper::mapWeatherDtoInWeatherResponse)
-                .orElseThrow(() -> new RequestProcessingException("Fail to get weather data")));
+        return weatherClient.getByCity(city)
+                .map(weatherResponseMapper::mapWeatherDtoInWeatherResponse);
     }
 }
