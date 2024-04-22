@@ -1,15 +1,17 @@
 package weather.integration.openweather;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClientResponseException;
 import weather.dto.WeatherDto;
-import weather.exception.ExternalServiceInvokeException;
-import weather.exception.ExternalServiceException;
-import weather.exception.InvalidApiKeyException;
+import weather.exception.BadRequestException;
+import weather.exception.FailedRequestException;
 import weather.integration.WeatherClient;
 
 import java.util.Optional;
@@ -21,6 +23,7 @@ class OpenWeatherClient implements WeatherClient {
     private final OpenWeatherProperties openWeatherProperties;
     private final OpenWeatherJsonParser openWeatherJsonParser;
 
+    @SuppressWarnings("DataFlowIssue")
     @Override
     public Optional<WeatherDto> getByCity(@NonNull String city) {
         String apiKey = openWeatherProperties.getApiKey();
@@ -30,28 +33,26 @@ class OpenWeatherClient implements WeatherClient {
                 "&units=", openWeatherProperties.getUnits()
         );
 
-        Optional<WeatherDto> optionalWeatherDto;
         try {
-            optionalWeatherDto = RestClient.create()
+            ResponseEntity<String> response = RestClient.create()
                     .get()
                     .uri(url)
                     .header("Accept", "application/json")
-                    .exchange((request, response) -> {
-                        HttpStatusCode statusCode = response.getStatusCode();
-                        if (statusCode.isSameCodeAs(HttpStatusCode.valueOf(404))) {
-                            return Optional.empty();
-                        } else if (statusCode.isSameCodeAs(HttpStatusCode.valueOf(401))) {
-                            throw new InvalidApiKeyException("Invalid API key provided");
-                        } else if (statusCode.is5xxServerError()) {
-                            throw new ExternalServiceException("Fail to get weather data");
-                        } else {
-                            return Optional.of(openWeatherJsonParser.toWeatherDto(response.getBody()));
-                        }
-                    });
+                    .retrieve()
+                    .toEntity(String.class);
 
-            return optionalWeatherDto;
-        } catch (RestClientResponseException e) {
-            throw new ExternalServiceInvokeException("Fail to get weather data", e);
+            if (!response.hasBody()) {
+                throw new FailedRequestException("Unexpected empty response body");
+            }
+
+            return Optional.of(openWeatherJsonParser.toWeatherDto(response.getBody()));
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return Optional.empty();
+            }
+            throw new BadRequestException("Invalid request", e);
+        } catch (HttpServerErrorException | JsonProcessingException e) {
+            throw new FailedRequestException("Unexpected error", e);
         }
     }
 }

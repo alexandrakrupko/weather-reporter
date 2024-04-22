@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import weather.exception.CityNotFoundException;
+import weather.exception.WeatherNotFoundException;
 import weather.response.WeatherResponse;
 import weather.service.WeatherService;
 
@@ -19,6 +19,6 @@ public class WeatherController {
     public ResponseEntity<WeatherResponse> getByCity(@PathVariable String city) {
         return weatherService.getByCity(city)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new CityNotFoundException("City not found: '%s'".formatted(city)));
+                .orElseThrow(() -> new WeatherNotFoundException("City not found: '%s'".formatted(city)));
     }
 }
