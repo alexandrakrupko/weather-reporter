@@ -1,13 +1,12 @@
 package weather.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class WeatherDto {
 
     private @NonNull String city;
