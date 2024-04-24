@@ -7,6 +7,8 @@ import weather.dto.TemperatureDto;
 import weather.dto.WeatherDto;
 import weather.model.Weather;
 
+import static weather.util.StringUtils.capitalizeFirstLetter;
+
 @Component
 @RequiredArgsConstructor
 public class WeatherDtoMapper {
@@ -17,7 +19,7 @@ public class WeatherDtoMapper {
         TemperatureDto temperatureDto = temperatureDtoMapper
                 .mapTemperatureInTemperatureDto(weather.getTemperature());
         return WeatherDto.builder()
-                .city(weather.getCity())
+                .city(capitalizeFirstLetter(weather.getCity()))
                 .timestamp(weather.getTimestamp())
                 .temperature(temperatureDto)
                 .build();

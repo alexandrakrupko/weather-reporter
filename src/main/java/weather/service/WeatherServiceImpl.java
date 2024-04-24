@@ -3,7 +3,6 @@ package weather.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import weather.dto.WeatherDto;
 import weather.integration.WeatherClient;
@@ -30,7 +29,7 @@ class WeatherServiceImpl implements WeatherService {
     @Override
     @SuppressWarnings("DataFlowIssue")
     public Optional<WeatherResponse> getByCity(@NonNull String city) {
-        Optional<Weather> optionalWeather = weatherRepository.findByCityAndCurrentDate(city);
+        Optional<Weather> optionalWeather = weatherRepository.findByCityAndCurrentDate(city.toLowerCase());
 
         if (optionalWeather.isPresent()) {
             return Optional.of(weatherResponseMapper.mapWeatherInWeatherResponse(optionalWeather.get()));

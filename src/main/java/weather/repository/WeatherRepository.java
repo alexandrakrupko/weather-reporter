@@ -11,12 +11,13 @@ import java.util.Optional;
 @Repository
 public interface WeatherRepository extends CrudRepository<Weather, Long> {
 
-    @Query("""
-            SELECT w FROM Weather w
-            WHERE w.city ILIKE :city
-            AND w.timestamp >= current_date
-            ORDER BY timestamp DESC
-            LIMIT 1
-            """)
+    @Query(nativeQuery = true,
+            value = """
+                    SELECT * FROM Weather
+                    WHERE city LIKE :city
+                    AND timestamp >= current_date AND timestamp < current_date + 1
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                    """)
     Optional<Weather> findByCityAndCurrentDate(@NonNull String city);
 }

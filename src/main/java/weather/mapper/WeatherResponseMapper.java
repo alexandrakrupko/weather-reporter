@@ -8,6 +8,8 @@ import weather.model.Weather;
 import weather.response.TemperatureResponse;
 import weather.response.WeatherResponse;
 
+import static weather.util.StringUtils.capitalizeFirstLetter;
+
 @Component
 @RequiredArgsConstructor
 public class WeatherResponseMapper {
@@ -28,7 +30,7 @@ public class WeatherResponseMapper {
         TemperatureResponse temperatureResponse = temperatureResponseMapper
                 .mapTemperatureInTemperatureResponse(weather.getTemperature());
         return WeatherResponse.builder()
-                .city(weather.getCity())
+                .city(capitalizeFirstLetter(weather.getCity()))
                 .timestamp(weather.getTimestamp())
                 .temperature(temperatureResponse)
                 .build();

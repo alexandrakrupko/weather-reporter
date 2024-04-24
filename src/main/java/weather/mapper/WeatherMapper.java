@@ -17,7 +17,7 @@ public class WeatherMapper {
         Temperature temperature = temperatureMapper
                 .mapTemperatureDtoInTemperature(weatherDto.getTemperature());
         return Weather.builder()
-                .city(weatherDto.getCity())
+                .city(weatherDto.getCity().toLowerCase())
                 .timestamp(weatherDto.getTimestamp())
                 .temperature(temperature)
                 .build();
