@@ -25,3 +25,9 @@ spring:
 integration:
   openweather:
     units: metric
+
+security:
+  username: admin
+  password: admin
+  jwt:
+    secret-key: c2VjcmV0S2V5c2VjcmV0S2V5c2VjcmV0S2V5c2VjcmV0S2V5
