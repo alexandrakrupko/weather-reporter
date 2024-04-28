@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import weather.exception.WeatherNotFoundException;
 import weather.response.WeatherResponse;
+import weather.security.JwtAuthentication;
 import weather.service.WeatherService;
 
 @RestController
@@ -16,6 +17,7 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("/weather/{city}")
+    @JwtAuthentication
     public ResponseEntity<WeatherResponse> getByCity(@PathVariable String city) {
         return weatherService.getByCity(city)
                 .map(ResponseEntity::ok)
