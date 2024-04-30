@@ -8,12 +8,15 @@ services:
       - "8070:8080"
     depends_on:
       - weather-service-db
+      - weather-cache
     environment:
       - server.port=8080
       - spring.datasource.url=jdbc:postgresql://weather-service-db:5432/weather
       - spring.datasource.username=admin
       - spring.datasource.password=admin
       #- integration.openweather.api-key=<your api key>
+      - spring.data.redis.host=weather-cache
+      - spring.data.redis.password=admin
 
   weather-service-db:
     image: postgres:14.7-alpine
@@ -26,5 +29,17 @@ services:
       - ./init-weather-db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - weather-db-data:/var/lib/postgresql/data
 
+  weather-cache:
+    image: redis:7.2-alpine
+    restart: always
+    environment:
+      - redis.password=admin
+    ports:
+      - "6379:6379"
+    command: redis-server --save 180 1 --loglevel warning --requirepass admin
+    volumes:
+      - cache-data:/data
+
 volumes:
   weather-db-data:
+  cache-data:

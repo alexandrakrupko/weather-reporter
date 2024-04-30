@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @AllArgsConstructor
-public class TemperatureResponse {
+public class TemperatureResponse implements Serializable {
 
     private @NonNull Float actual;
     private @NonNull Float feelsLike;
