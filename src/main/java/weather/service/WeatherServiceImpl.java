@@ -2,6 +2,7 @@ package weather.service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import weather.dto.WeatherDto;
@@ -27,7 +28,7 @@ class WeatherServiceImpl implements WeatherService {
     private final TransactionTemplate transactionTemplate;
 
     @Override
-    @SuppressWarnings("DataFlowIssue")
+    @Cacheable(value = "weatherCache", key = "#city.toLowerCase() + T(java.time.LocalDate).now()")
     public Optional<WeatherResponse> getByCity(@NonNull String city) {
         Optional<Weather> optionalWeather = weatherRepository.findByCityAndCurrentDate(city.toLowerCase());
 
@@ -37,17 +38,17 @@ class WeatherServiceImpl implements WeatherService {
 
         Optional<WeatherDto> optionalWeatherDto = weatherClient.getByCity(city);
         if (optionalWeatherDto.isPresent()) {
-            WeatherDto savedWeatherDto = transactionTemplate
-                    .execute((ignore) -> save(optionalWeatherDto.get()));
+            WeatherDto savedWeatherDto = save(optionalWeatherDto.get());
             return Optional.of(weatherResponseMapper.mapWeatherDtoInWeatherResponse(savedWeatherDto));
         }
 
         return Optional.empty();
     }
 
-    @Override
-    public WeatherDto save(@NonNull WeatherDto weatherDto) {
-        Weather weather = weatherRepository.save(weatherMapper.mapWeatherDtoInWeather(weatherDto));
-        return weatherDtoMapper.mapWeatherInWeatherDto(weather);
+    private WeatherDto save(@NonNull WeatherDto weatherDto) {
+        return transactionTemplate.execute(status -> {
+            Weather weather = weatherRepository.save(weatherMapper.mapWeatherDtoInWeather(weatherDto));
+            return weatherDtoMapper.mapWeatherInWeatherDto(weather);
+        });
     }
 }
