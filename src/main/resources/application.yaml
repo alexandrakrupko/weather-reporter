@@ -4,6 +4,23 @@ server:
 spring:
   application:
     name: weather-reporter
+  datasource:
+    url: jdbc:postgresql://localhost:5432/weather
+    driver-class-name: org.postgresql.Driver
+    username: admin
+    password: admin
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: public
+    show-sql: true
+    open-in-view: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    default-schema: public
 
 integration:
   openweather:

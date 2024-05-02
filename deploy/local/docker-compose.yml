@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  weather-service:
+    build:
+      context: ../../.
+      dockerfile: Dockerfile
+    ports:
+      - "8070:8080"
+    depends_on:
+      - weather-service-db
+    environment:
+      - server.port=8080
+      - spring.datasource.url=jdbc:postgresql://weather-service-db:5432/weather
+      - spring.datasource.username=admin
+      - spring.datasource.password=admin
+      #- integration.openweather.api-key=<your api key>
+
+  weather-service-db:
+    image: postgres:14.7-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5555:5432"
+    volumes:
+      - ./init-weather-db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - weather-db-data:/var/lib/postgresql/data
+
+volumes:
+  weather-db-data:
