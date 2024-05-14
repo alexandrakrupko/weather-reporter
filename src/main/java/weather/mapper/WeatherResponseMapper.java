@@ -20,7 +20,7 @@ public class WeatherResponseMapper {
         TemperatureResponse temperatureResponse = temperatureResponseMapper
                 .mapTemperatureDtoInTemperatureResponse(weatherDto.getTemperature());
         return WeatherResponse.builder()
-                .city(weatherDto.getCity())
+                .city(capitalizeFirstLetter(weatherDto.getCity()))
                 .timestamp(weatherDto.getTimestamp())
                 .temperature(temperatureResponse)
                 .build();
