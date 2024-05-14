@@ -21,6 +21,7 @@ import java.util.Optional;
 class OpenWeatherClient implements WeatherClient {
 
     private final OpenWeatherProperties openWeatherProperties;
+    private final RestClient.Builder restClientBuilder;
     private final OpenWeatherJsonParser openWeatherJsonParser;
 
     @SuppressWarnings("DataFlowIssue")
@@ -34,7 +35,7 @@ class OpenWeatherClient implements WeatherClient {
         );
 
         try {
-            ResponseEntity<String> response = RestClient.create()
+            ResponseEntity<String> response = restClientBuilder.build()
                     .get()
                     .uri(url)
                     .header("Accept", "application/json")

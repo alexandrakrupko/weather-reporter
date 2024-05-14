@@ -30,7 +30,6 @@ public class SecurityConfiguration {
 
     private final SecurityProperties securityProperties;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager)
             throws Exception {
