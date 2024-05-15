@@ -3,6 +3,7 @@ package weather.integration.openweather;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 class OpenWeatherClient implements WeatherClient {
 
     private final OpenWeatherProperties openWeatherProperties;
@@ -46,9 +48,11 @@ class OpenWeatherClient implements WeatherClient {
                 throw new FailedRequestException("Unexpected empty response body");
             }
 
+            log.info("Weather info retrieved for city '{}'", city);
             return Optional.of(openWeatherJsonParser.toWeatherDto(response.getBody()));
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                log.warn("Weather info not found for city '{}'", city);
                 return Optional.empty();
             }
             throw new BadRequestException("Invalid request", e);
