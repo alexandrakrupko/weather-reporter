@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("isAuthenticated() and @authorizationResolver.jwt")
+@PreAuthorize("isAuthenticated() and @authenticationResolver.jwt")
 public @interface JwtAuthentication {
 }
