@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.ExpectedCount.once;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static weather.util.OpenWeatherClientTestUtils.createUri;
 
 @RestClientTest
 @AutoConfigureMockRestServiceServer
@@ -57,18 +58,18 @@ class OpenWeatherClientTest {
     @DisplayName("should invoke external api and return optional of WeatherDto")
     public void shouldInvokeExternalApiAndReturnOptionalOfWeatherDto() throws JsonProcessingException {
         // given
-        when(openWeatherProperties.getApiKey()).thenReturn(Tool.apiKey);
-        when(openWeatherProperties.getUnits()).thenReturn(Tool.units);
+        when(openWeatherProperties.getApiKey()).thenReturn("apiKey");
+        when(openWeatherProperties.getUnits()).thenReturn("units");
 
         TemperatureDto mockTemperatureDto = mock(TemperatureDto.class);
         WeatherDto weatherDto = WeatherDto.builder()
-                .city(Tool.city)
+                .city("city")
                 .timestamp(LocalDateTime.now())
                 .temperature(mockTemperatureDto)
                 .build();
 
         String response = objectMapper.writeValueAsString(weatherDto);
-        mockRestServiceServer.expect(once(), requestTo(Tool.uri))
+        mockRestServiceServer.expect(once(), requestTo(createUri("city", "apiKey", "units")))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Accept", "application/json"))
                 .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
@@ -76,12 +77,12 @@ class OpenWeatherClientTest {
         when(openWeatherJsonParser.toWeatherDto(response)).thenReturn(weatherDto);
 
         // when
-        Optional<WeatherDto> optionalWeatherDto = openWeatherClient.getByCity(Tool.city);
+        Optional<WeatherDto> optionalWeatherDto = openWeatherClient.getByCity("city");
 
         // then
         mockRestServiceServer.verify();
         assertTrue(optionalWeatherDto.isPresent());
-        assertEquals(Tool.city, optionalWeatherDto.get().getCity());
+        assertEquals("city", optionalWeatherDto.get().getCity());
         assertEquals(mockTemperatureDto, optionalWeatherDto.get().getTemperature());
     }
 
@@ -89,31 +90,23 @@ class OpenWeatherClientTest {
     @DisplayName("should throw FailedRequestException when response has no body")
     public void shouldThrowFailedRequestExceptionWhenResponseHasNoBody() {
         // given
-        when(openWeatherProperties.getApiKey()).thenReturn(Tool.apiKey);
-        when(openWeatherProperties.getUnits()).thenReturn(Tool.units);
+        when(openWeatherProperties.getApiKey()).thenReturn("apiKey");
+        when(openWeatherProperties.getUnits()).thenReturn("units");
 
-        mockRestServiceServer.expect(once(), requestTo(Tool.uri))
+        mockRestServiceServer.expect(once(), requestTo(createUri("city", "apiKey", "units")))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Accept", "application/json"))
                 .andRespond(withSuccess());
 
         // when, then
         Exception exception = assertThrows(
-                FailedRequestException.class, () -> openWeatherClient.getByCity(Tool.city));
+                FailedRequestException.class, () -> openWeatherClient.getByCity("city"));
         assertEquals("Unexpected empty response body", exception.getMessage());
         mockRestServiceServer.verify();
     }
 
     @TestConfiguration
-    public static class Tool {
-
-        private static final String city = "City";
-        private static final String apiKey = "apiKey";
-        private static final String units = "metric";
-        private static final String uri = String.join("",
-                "https://api.openweathermap.org/data/2.5/weather?q=", city,
-                "&appid=", apiKey,
-                "&units=", units);
+    public static class Configuration {
 
         @Bean
         public RestClient.Builder restClientBuilder() {

@@ -7,14 +7,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import weather.IntegrationTest;
-import weather.model.Temperature;
 import weather.model.Weather;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static weather.util.WeatherTestUtils.createWeather;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -29,26 +28,17 @@ class WeatherRepositoryTest extends IntegrationTest {
     @DisplayName("should return Weather when exists")
     public void shouldReturnWeatherWhenExists() {
         // given
-        Temperature temperature = Temperature.builder()
-                .actual(1.2f)
-                .feelsLike(2.2f)
-                .rainfall("Snow")
-                .build();
-        String city = "City";
-        Weather weather = Weather.builder()
-                .city(city)
-                .timestamp(LocalDateTime.now())
-                .temperature(temperature)
-                .build();
-        entityManager.persistAndFlush(weather);
+        entityManager.persistAndFlush(createWeather("City", 5.2f));
 
         // when
-        Optional<Weather> optionalWeather = weatherRepository.findByCityAndCurrentDate(city);
+        Optional<Weather> optionalWeather = weatherRepository.findByCityAndCurrentDate("City");
 
         // then
         assertTrue(optionalWeather.isPresent());
-        assertEquals(city, optionalWeather.get().getCity());
-        assertEquals(temperature, optionalWeather.get().getTemperature());
+
+        Weather weather = optionalWeather.get();
+        assertEquals("City", weather.getCity());
+        assertEquals(5.2f, weather.getTemperature().getActual());
     }
 
     @Test
