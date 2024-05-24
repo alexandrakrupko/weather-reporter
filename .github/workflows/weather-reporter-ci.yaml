@@ -1,0 +1,21 @@
+name: Weather Reporter CI
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout/@v4
+      - name: set up jdk 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+      - name: test
+        run: mvn test
+      - name: build
+        run: mvn package -DskipTests
