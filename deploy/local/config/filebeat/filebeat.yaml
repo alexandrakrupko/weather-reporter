@@ -13,8 +13,3 @@ filebeat.autodiscover:
 output.logstash:
   hosts: ["logstash:5044"]
   enabled: true
-
-#output:
-#  file:
-#    path: "/tmp/filebeat"
-#    filename: filebeat
