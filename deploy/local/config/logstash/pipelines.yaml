@@ -1,0 +1,4 @@
+- pipeline.id: weather-reporter-json-logs
+  pipeline.workers: 1
+  pipeline.batch.size: 1
+  path.config: /usr/share/logstash/config/pipelines/weather-reporter-json-logs.conf
