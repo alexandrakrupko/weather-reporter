@@ -3,8 +3,8 @@ services:
   weather-service:
     container_name: weather-service
     build:
-      context: ../../.
-      dockerfile: Dockerfile
+      context: ../../service/reporter
+      dockerfile: ../../build/reporter/Dockerfile
     ports:
       - "8070:8080"
     depends_on:
