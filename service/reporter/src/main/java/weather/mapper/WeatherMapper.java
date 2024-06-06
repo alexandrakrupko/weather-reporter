@@ -3,7 +3,7 @@ package weather.mapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import weather.dto.WeatherDto;
+import weather.api.dto.WeatherDto;
 import weather.model.Temperature;
 import weather.model.Weather;
 

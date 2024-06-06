@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
-import weather.dto.TemperatureDto;
-import weather.dto.WeatherDto;
+import weather.api.dto.TemperatureDto;
+import weather.api.dto.WeatherDto;
 
 import java.time.LocalDateTime;
 

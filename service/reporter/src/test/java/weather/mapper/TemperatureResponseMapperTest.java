@@ -3,7 +3,7 @@ package weather.mapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import weather.dto.TemperatureDto;
+import weather.api.dto.TemperatureDto;
 import weather.model.Temperature;
 import weather.response.TemperatureResponse;
 

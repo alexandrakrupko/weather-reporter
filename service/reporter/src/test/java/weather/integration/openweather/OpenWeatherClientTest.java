@@ -16,8 +16,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
-import weather.dto.TemperatureDto;
-import weather.dto.WeatherDto;
+import weather.api.dto.TemperatureDto;
+import weather.api.dto.WeatherDto;
 import weather.exception.FailedRequestException;
 
 import java.time.LocalDateTime;

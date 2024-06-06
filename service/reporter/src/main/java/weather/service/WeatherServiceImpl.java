@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
-import weather.dto.WeatherDto;
+import weather.api.dto.WeatherDto;
 import weather.integration.WeatherClient;
 import weather.mapper.WeatherDtoMapper;
 import weather.mapper.WeatherMapper;

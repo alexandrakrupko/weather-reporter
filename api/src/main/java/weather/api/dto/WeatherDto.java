@@ -1,6 +1,9 @@
-package weather.dto;
+package weather.api.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 

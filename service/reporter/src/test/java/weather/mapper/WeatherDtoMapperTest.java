@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import weather.dto.TemperatureDto;
-import weather.dto.WeatherDto;
+import weather.api.dto.TemperatureDto;
+import weather.api.dto.WeatherDto;
 import weather.model.Temperature;
 import weather.model.Weather;
 

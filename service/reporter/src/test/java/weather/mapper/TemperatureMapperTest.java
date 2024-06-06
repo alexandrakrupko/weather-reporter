@@ -2,7 +2,7 @@ package weather.mapper;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import weather.dto.TemperatureDto;
+import weather.api.dto.TemperatureDto;
 import weather.model.Temperature;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

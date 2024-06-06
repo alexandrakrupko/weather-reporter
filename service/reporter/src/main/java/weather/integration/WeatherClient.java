@@ -1,7 +1,7 @@
 package weather.integration;
 
 import lombok.NonNull;
-import weather.dto.WeatherDto;
+import weather.api.dto.WeatherDto;
 
 import java.util.Optional;
 
