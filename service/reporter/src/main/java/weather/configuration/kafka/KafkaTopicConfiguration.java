@@ -12,6 +12,6 @@ public class KafkaTopicConfiguration {
 
     @Bean
     public NewTopic weatherTopic() {
-        return TopicBuilder.name("weather-topic").build();
+        return TopicBuilder.name("weather").build();
     }
 }
