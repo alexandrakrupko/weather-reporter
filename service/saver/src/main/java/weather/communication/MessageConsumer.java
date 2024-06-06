@@ -10,6 +10,6 @@ public class MessageConsumer {
 
     @KafkaListener(topics = "weather-topic", groupId = "weather")
     public void listen(String message) {
-        log.info("Received message: '{}'", message);
+        log.info("Saver received message: '{}'", message);
     }
 }

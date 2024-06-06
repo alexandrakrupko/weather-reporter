@@ -32,8 +32,6 @@ spring:
   kafka:
     bootstrap-servers:
       - localhost:9094
-    consumer:
-      group-id: weather
 
 integration:
   openweather:

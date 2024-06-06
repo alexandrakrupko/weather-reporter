@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.support.TransactionTemplate;
-import weather.dto.WeatherDto;
+import weather.api.dto.WeatherDto;
 import weather.integration.WeatherClient;
 import weather.mapper.WeatherResponseMapper;
 import weather.model.Weather;

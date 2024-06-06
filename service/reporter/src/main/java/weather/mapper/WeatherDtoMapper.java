@@ -3,8 +3,8 @@ package weather.mapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import weather.dto.TemperatureDto;
-import weather.dto.WeatherDto;
+import weather.api.dto.TemperatureDto;
+import weather.api.dto.WeatherDto;
 import weather.model.Weather;
 
 import static weather.util.StringUtils.capitalizeFirstLetter;

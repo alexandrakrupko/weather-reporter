@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
-import weather.dto.WeatherDto;
+import weather.api.dto.WeatherDto;
 import weather.exception.BadRequestException;
 import weather.exception.FailedRequestException;
 import weather.integration.WeatherClient;
