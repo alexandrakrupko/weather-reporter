@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MessageConsumer {
 
-    @KafkaListener(topics = "weather-topic", groupId = "weather")
-    public void listen(String message) {
-        log.info("Saver received message: '{}'", message);
+    @KafkaListener(topics = "weather", groupId = "weather")
+    public void listen(String weatherMessage) {
+        log.info("Saver received dto: '{}'", weatherMessage);
     }
 }

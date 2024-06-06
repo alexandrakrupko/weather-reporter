@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import weather.api.dto.WeatherDto;
+import weather.communication.MessageBroker;
 import weather.integration.WeatherClient;
 import weather.mapper.WeatherDtoMapper;
 import weather.mapper.WeatherMapper;
@@ -28,6 +29,7 @@ class WeatherServiceImpl implements WeatherService {
     private final WeatherMapper weatherMapper;
     private final WeatherDtoMapper weatherDtoMapper;
     private final TransactionTemplate transactionTemplate;
+    private final MessageBroker messageBroker;
 
     @Override
     @Cacheable(value = "weatherCache", key = "#city.toLowerCase() + T(java.time.LocalDate).now()")
@@ -42,6 +44,7 @@ class WeatherServiceImpl implements WeatherService {
         Optional<WeatherDto> optionalWeatherDto = weatherClient.getByCity(city);
         if (optionalWeatherDto.isPresent()) {
             log.info("Weather retrieved from external service for city '{}'", city);
+            messageBroker.sendWeather(optionalWeatherDto.get());
             WeatherDto savedWeatherDto = save(optionalWeatherDto.get());
             return Optional.of(weatherResponseMapper.mapWeatherDtoInWeatherResponse(savedWeatherDto));
         }

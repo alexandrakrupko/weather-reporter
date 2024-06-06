@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.support.TransactionTemplate;
 import weather.api.dto.WeatherDto;
+import weather.communication.MessageBroker;
 import weather.integration.WeatherClient;
 import weather.mapper.WeatherResponseMapper;
 import weather.model.Weather;
@@ -31,6 +32,8 @@ class WeatherServiceImplTest {
     private WeatherResponseMapper weatherResponseMapper;
     @Mock
     private TransactionTemplate transactionTemplate;
+    @Mock
+    private MessageBroker messageBroker;
     @InjectMocks
     private WeatherServiceImpl weatherService;
 
@@ -66,6 +69,8 @@ class WeatherServiceImplTest {
 
         WeatherResponse mockWeatherResponse = mock(WeatherResponse.class);
         when(weatherResponseMapper.mapWeatherDtoInWeatherResponse(mockWeatherDto)).thenReturn(mockWeatherResponse);
+
+        doNothing().when(messageBroker).sendWeather(any(WeatherDto.class));
 
         // when
         Optional<WeatherResponse> optionalWeatherResponse = weatherService.getByCity("City");
