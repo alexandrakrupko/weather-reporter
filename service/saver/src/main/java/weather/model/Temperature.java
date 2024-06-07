@@ -1,12 +1,12 @@
-package weather.api.dto;
+package weather.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class TemperatureDto {
+public class Temperature {
 
     private @NonNull Float actual;
     private @NonNull Float feelsLike;
