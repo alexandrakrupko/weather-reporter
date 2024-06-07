@@ -4,3 +4,9 @@ spring:
       - localhost:9094
     consumer:
       group-id: weather
+
+  data:
+    mongodb:
+      database: weather
+      port: 27017
+      host: localhost

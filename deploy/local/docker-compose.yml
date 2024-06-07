@@ -126,8 +126,17 @@ services:
     ports:
       - "9094:9094"
 
+  mongo-db:
+    container_name: mongo-db
+    image: mongo:7-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-db:/data/db
+
 volumes:
   weather-db-data:
   cache-data:
   filebeat-registry:
   elasticsearch:
+  mongo-db:
