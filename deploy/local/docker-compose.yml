@@ -1,19 +1,19 @@
 version: '3.8'
 services:
-  weather-service:
-    container_name: weather-service
+  weather-reporter:
+    container_name: weather-reporter
     build:
-      context: ../../service/reporter
-      dockerfile: ../../build/reporter/Dockerfile
+      context: ../../.
+      dockerfile: build/reporter/Dockerfile
     ports:
       - "8070:8080"
     depends_on:
-      - weather-service-db
+      - weather-reporter-db
       - weather-cache
       - kafka
     environment:
       - server.port=8080
-      - spring.datasource.url=jdbc:postgresql://weather-service-db:5432/weather
+      - spring.datasource.url=jdbc:postgresql://weather-reporter-db:5432/weather
       - spring.datasource.username=admin
       - spring.datasource.password=admin
       #- integration.openweather.api-key=<your api key>
@@ -27,8 +27,25 @@ services:
       filebeat_enable: true
       co.elastic.logs: true
 
-  weather-service-db:
-    container_name: weather-service-db
+  weather-saver:
+    container_name: weather-saver
+    build:
+      context: ../../.
+      dockerfile: build/saver/Dockerfile
+    ports:
+      - "8071:8080"
+    depends_on:
+      - kafka
+      - mongo-db
+    environment:
+      - spring.kafka.bootstrap-servers=kafka:9092
+      - spring.kafka.consumer.group-id=weather
+      - spring.data.mongodb.database=weather
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.host=mongo-db
+
+  weather-reporter-db:
+    container_name: weather-reporter-db
     image: postgres:14.7-alpine
     environment:
       POSTGRES_USER: admin
